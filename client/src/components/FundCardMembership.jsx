@@ -6,29 +6,18 @@ import { daysLeft } from '../utils';
 
 const FundCardMembership = ({owner,title,description,target,
 deadline,amountCollected,image,handleClick}) => {
-  const calculateRemainingDays = () => {
-    const now = new Date().getTime();
-    console.log(now)
-    const difference = new Date(deadline).getTime() - now;
-    console.log(difference);
-    const remainingDays = difference / (1000 * 3600 * 24);
-    console.log(remainingDays);
-    return Math.max(0, Math.round(remainingDays));
-  };
-
-  const [remainingDays, setRemainingDays] = useState(calculateRemainingDays());
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setRemainingDays(calculateRemainingDays()); // Recalculate remaining days every 24 hours
-    }, 24 * 60 * 60 * 1000);
-
-    return () => clearInterval(intervalId); // Cleanup interval on component unmount
-  }, [deadline]);
-
+  const [counter, setCounter] = useState(deadline); 
   // const remainingDays = daysLeft(deadline);
   // console.log(remainingDays);
   
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounter(prevCounter => prevCounter - 1); 
+    }, 24 * 60 * 60 * 1000); 
+
+    return () => clearInterval(interval);
+  }, []); 
+
   return (
     <div className='sm:w-[278px] w-full rounded-[15px] bg-[#1c1c24]
     cursor-pointer' onClick={handleClick}>
@@ -61,7 +50,7 @@ deadline,amountCollected,image,handleClick}) => {
 
           <div className='flex flex-col'>
             <h4 className='font-epilogue font-semibold text-[14px]
-            text-[#b2b3bd] leading-[22px]'>{remainingDays} Days</h4> 
+            text-[#b2b3bd] leading-[22px]'>{counter} Days</h4> 
             {/* yaha pe deadline ke jhage remainingdays ayega after create a perfect remaining days functionn */}
 
             <p className='mt-[3px] font-epilogue font-normal text-[12px]

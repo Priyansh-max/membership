@@ -10,6 +10,7 @@ contract crowdfunding {
         uint256 deadline;
         uint256 amountCollected;
         string image;
+        string fileuri;
         address[] donators;
         uint256[] donations;
     }
@@ -22,10 +23,8 @@ contract crowdfunding {
     // for our project to create 
     // a membership so change it accordingly
 
-    function createCampaign(address _owner, string memory _title , string memory _description, uint256 _target , uint256 _deadline , string memory _image) public returns(uint256){
+    function createCampaign(address _owner , string memory _title , string memory _description, uint256 _target , uint256 _deadline , string memory _image, string memory _fileuri) public returns(uint256){
         Campaign storage campaign = campaigns[numberOfCampaigns];
-
-        require(campaign.deadline < block.timestamp , "The deadline should be a date in the future.");
 
         campaign.owner = _owner;
         campaign.title = _title;
@@ -34,6 +33,7 @@ contract crowdfunding {
         campaign.deadline = _deadline;
         campaign.amountCollected = 0;
         campaign.image = _image;
+        campaign.fileuri = _fileuri;
 
         numberOfCampaigns++;
 

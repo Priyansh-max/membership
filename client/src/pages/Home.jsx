@@ -6,11 +6,11 @@ import { DisplayCampaign } from '../components';
 const Home = () => {
   const [isLoading,setIsLoading] = useState(false);
   const [campaigns,setCampaigns] = useState([]);
-  const {address, contract , getCampaigns} = useStateContext();
+  const {address, contract , getAllCampaigns} = useStateContext();
 
   const fetchCampaigns = async () => {
     setIsLoading(true);
-    const data = await getCampaigns();
+    const data = await getAllCampaigns();
     setCampaigns(data);
     setIsLoading(false);
   }
@@ -24,13 +24,15 @@ const Home = () => {
     <div>
       {address ? (
         <DisplayCampaign 
-          title='All Campaigns'
+          title='All Memberships'
           isLoading={isLoading}
           campaigns={campaigns}
         />
       ) : (
-        <div>
-          <h1>Welcome to my website to get started connect your wallet to the sepolia test network
+        <div className='flex-1'>
+          <h1 className='flex flex-row p-4 bg-[#1c1c24] rounded-[10px] font-epilogue font-medium text-[18px] w-full
+              text-center text-[#808191]'>
+               Welcome to my website to get started connect your wallet to the sepolia test network 
           </h1>
         </div>
 

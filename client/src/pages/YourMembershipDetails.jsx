@@ -7,7 +7,7 @@ import {CountBox, CustomButton} from '../components';
 import {calculateBarPercentage,daysLeft } from '../utils';
 import {thirdweb} from '../assets';
 
-const CampaignDetails = () => {
+const YourMembershipDetails = () => {
   const {state} = useLocation();
   const {donate , getDonations , contract , address} = useStateContext();
   const [isLoading , setIsLoading] = useState(false);
@@ -28,7 +28,7 @@ const CampaignDetails = () => {
 
   const handleDonate = async () => {
     setIsLoading(true);
-    await donate(state.pId ,state.target);
+    await donate(state.pId ,amount);
     setIsLoading(false);
   }
 
@@ -48,13 +48,13 @@ const CampaignDetails = () => {
           </div>
         </div>
 
-        <div className='flex md:w-[150px] w-full flex-wrap justify-between
+        {/* <div className='flex md:w-[150px] w-full flex-wrap justify-between
         gap-[30px] h-[310px]'>
           <CountBox title='Duration' text='Days' value={state.deadline}/>
-          <CountBox title= 'Price' text='ETH' value = {state.target} />
+          <CountBox title= 'AmountCollected' text='ETH'   value = {state.amountCollected}/>
           <CountBox title='Total Members' value={donators.length}/>
 
-        </div>
+        </div> */}
       </div>
 
       <div className='mt-[30px] flex lg:flex-row flex-col gap-5'>
@@ -106,23 +106,33 @@ const CampaignDetails = () => {
               </div>
           </div>
         </div>
+        <div className='flex-1 bg-[#121215] rounded-[10px] p-4'>
+          <h4 className='font-epilogue font-semibold text-[18px]
+          text-white  text-center py-3'>Dashboard</h4>
+          <div className='flex md:w-[150px] w-full flex-wrap justify-between
+          gap-[30px] h-[100px] '>
+            <div className='flex flex-row gap-5'>
+              <CountBox title='Duration' text='Days' value={state.deadline}/>
+              <CountBox title= 'Price' text='ETH' value = {state.target} />
+            </div>
+            <div className='flex flex-row gap-5'>
+              <CountBox title= 'AmountCollected' text='ETH'   value = {state.amountCollected}/>
+              <CountBox title='Total Members' value={donators.length}/>
+            </div>
 
-        <div className='flex-1'>
+          </div>
+        </div>
+
+        {/* <div className='flex-1'>
             <h4 className='font-epilogue font-semibold text-[18px]
-            text-white uppercase'></h4>
+            text-white uppercase'>Donators</h4>
 
             <div className='flex flex-col p-4 bg-[#1c1c24] rounded-[10px]'>
               <p className='font-epilogue font-medium text-[18px] leading-[30px]
-              text-center text-[#808191]'> Rent this membership</p>
+              text-center text-[#808191]'> Fund the Campaign</p>
 
               <div className='mt-[30px]'>
-              <label className='block text-white text-[18px] mb-[10px]'>
-                 Price: {state.target} ETH
-              </label>
-              <label className='block text-white text-[18px] mb-[10px]'>
-                Duration: {state.deadline} Days
-              </label>
-                {/* <input 
+                <input 
                   type="number" 
                   placeholder="ETH 0.1"
                   step='0.001'
@@ -133,20 +143,20 @@ const CampaignDetails = () => {
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   
-                /> */}
+                />
 
                 <CustomButton 
                   btnType='button'
-                  title='Rent Membership'
+                  title='Fund Campaign'
                   styles='w-full bg-[#8c6dfd]'
                   handleClick={handleDonate}
                 />
               </div>
             </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )
 }
 
-export default CampaignDetails
+export default YourMembershipDetails

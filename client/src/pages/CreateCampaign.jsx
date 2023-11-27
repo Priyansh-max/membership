@@ -14,6 +14,7 @@ const CreateCampaign = () => {
   const [isLoading , setIsLoading] = useState(false);
   const [amount,setAmount] = useState("");
   const [File , setFile] = useState();
+  const [Fileuri , setFileuri] = useState();
   const { mutateAsync: upload } = useStorageUpload();
   const [form , setForm] = useState({
     name:'',
@@ -22,6 +23,7 @@ const CreateCampaign = () => {
     target:'',
     deadline:'',
     image:'',
+    fileuri:''
   })
 
 const handleFormFieldChange = (fieldname,e) => {
@@ -29,13 +31,22 @@ const handleFormFieldChange = (fieldname,e) => {
 }
 
 const handleFileUpload = async () => {
-  const uploadUrl = await upload({
-    data: [File],
-    options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
-  });
-  alert(uploadUrl);
-
-}
+  try {
+    const uploadUrl = await upload({
+      data: [File],
+      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+    });
+    alert(uploadUrl);
+    console.log(uploadUrl.toString());
+    const urlParts = uploadUrl.toString().split('/');
+    const ipfsHash = urlParts[urlParts.length - 2];
+    setFileuri(ipfsHash);
+    // setForm({ ...form, fileuri: ipfsHash });
+    console.log(`IPFS Hash: ${ipfsHash}`);
+  } catch (error) {
+    console.error('Error uploading to IPFS:', error);
+    }
+  };
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -44,7 +55,7 @@ const handleSubmit = async (e) => {
     if(exists){
       setIsLoading(true);
       await createCampaign({...form , 
-      target:ethers.utils.parseUnits(form.target,18)})
+      target:ethers.utils.parseUnits(form.target,18)});
       setIsLoading(false);
       navigate('/')
 
@@ -58,13 +69,13 @@ const handleSubmit = async (e) => {
 }
 
   return (
-    <div className='bg-[#1c1c24] flex justify-center items-center 
-      flex-col rounded-[10px] p-4'>
+    <div className='bg-[#1c1c24]  flex justify-center items-center 
+      flex-col rounded-[10px] p-4 '>
         {isLoading && 'loader....'}
         <div className='flex justify-center items-center 
-        p-[16px] bg-[#3a3a43] rounded-[10px]'>
-          <h1 className='font-epilogue font-bold text-[18px] 
-          leading-[38px] text-white'>Start a Campaign</h1>
+        p-[16px] rounded-[10px] bg-gradient-to-b from-violet-800 to-fuchsia-1000'>
+          <h1 className='font-epilogue font-bold text-[22px] 
+          leading-[38px] text-white'>Create your membership</h1>
         </div>
 
         <form onSubmit={handleSubmit} className='w-full mt-[65px] flex flex-col 
@@ -72,15 +83,15 @@ const handleSubmit = async (e) => {
           <div className='flex flex-wrap gap-[40px]'>
             <FormField 
               LabelName='Your Name*'
-              placeholder='john doe'
+              placeholder='Artist'
               inputType='text'
               value={form.name}
               handleChange={(e) => handleFormFieldChange('name',e)}
             />
 
             <FormField 
-              LabelName='Campaign Title*'
-              placeholder='Write a title'
+              LabelName='Membership Title*'
+              placeholder='Write a title which best suits your membership'
               inputType='text'
               value={form.title}
               handleChange={(e) => handleFormFieldChange('title',e)}
@@ -88,28 +99,26 @@ const handleSubmit = async (e) => {
           </div>
 
           <FormField 
-              LabelName='Story *'
-              placeholder='Write your story *'
+              LabelName='Description *'
+              placeholder='Write about who you are and what you will offer *'
               isTextArea
               value={form.description}
               handleChange={(e) => handleFormFieldChange('description',e)}
             />
 
-          <div className='w-full flex justify-start items-center p-4 bg-[#8c6dfd]
+          <div className='w-full flex justify-start items-center p-4 bg-gradient-to-t from-violet-800 to-fuchsia-500";
           h-[120px] rounded-[10px]'>
             <img src= {money} alt="money" className='w-[50px] h-[50px]
             object-contain' />
-            <h4 className='font-epilogue font-bold text-[37px] text-white ml-[20px]'>you will get 100% of 
-            the raised amountds
+            <h4 className='font-epilogue font-bold text-[37px] text-white ml-[20px]'>Get 100% of your membership amount
             </h4>
 
           </div>
 
           <div className='flex flex-wrap gap-[40px]'>
             <FormField 
-              LabelName='Goal*'
+              LabelName='Price*'
               placeholder='ETH 0.05'
-              step='0.01'
               inputType='number'
               value={form.target}
               value1={amount}
@@ -118,16 +127,16 @@ const handleSubmit = async (e) => {
             />
 
             <FormField 
-              LabelName='End Date*'
-              placeholder='End Date'
-              inputType='date'
+              LabelName='Duration* (in Days)'
+              placeholder='Duration'
+              inputType='number'
               value={form.deadline}
               handleChange={(e) => handleFormFieldChange('deadline',e)}
             />
           </div>
             <FormField 
-              LabelName='Campaign Image*'
-              placeholder='Place image URL of your image'
+              LabelName='Display Image*'
+              placeholder='Place image URL of your display image. NOTE!! *This image will be visible to everyone*'
               inputType='url'
               value={form.image}
               handleChange={(e) => handleFormFieldChange('image',e)}
@@ -152,8 +161,21 @@ const handleSubmit = async (e) => {
               />
             </div> */}
 
-            <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-            <button onClick={handleFileUpload}>Upload</button>
+            {/* <div>
+              <FormField 
+                LabelName='Exclusive Content*'
+                placeholder='Select Image*'
+                inputType='file'
+                onChange={(e) => setFile(e.target.files[0])}
+                value={form.fileuri}
+                handleChange={(e) => handleFormFieldChange('fileuri',e)}
+              />
+
+              <button onClick={handleFileUpload}>Upload</button> 
+            </div> */}
+
+            {/* <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+            <button onClick={handleFileUpload}>Upload</button> */}
 
             <div className='flex justify-center items-center mt-[40px]'>
               <CustomButton 

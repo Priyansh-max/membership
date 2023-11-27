@@ -1,6 +1,6 @@
 import React , {useState , useEffect } from 'react'
 import { useStateContext } from '../context'
-import { DisplayCampaign, DisplayMembershipRented } from '../components';
+import { DisplayCampaign, DisplayMembershipRented , DisplayYourMembership } from '../components';
 
 
 const Profile = () => {
@@ -37,8 +37,8 @@ const Profile = () => {
     <div>
       {address ? (
         <div>
-          <DisplayCampaign 
-          title='Your Campaigns'
+          <DisplayYourMembership 
+          title='Your Memberships'
           isLoading={isLoading}
           campaigns={campaigns}
           />

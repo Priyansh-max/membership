@@ -28,7 +28,7 @@ const DisplayCampaign = ({title , isLoading , campaigns}) => {
             {!isLoading && campaigns.length == 0 && (
                 <p className='font-epilogue font-semibold
                 text-[14px] leading-[30px] text-[#818183]'>
-                    You have not created any campaigns yet
+                    There are no membership available at the moment... :0
                 </p>
             )}
 

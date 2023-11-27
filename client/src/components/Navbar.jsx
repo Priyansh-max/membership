@@ -18,7 +18,7 @@ const Navbar = () => {
         gap-6'>
             <div className='md:flex flex flex-row w-[700px] 
             py-2 pl-4 pr-2 h-[62px] bg-[#1c1c24] rounded-[80px]' >
-                <input type ="text" placeholder='Search for campaigns'
+                <input type ="text" placeholder='Search for membership'
                 className='flex w-full font-epilogue font-normal text-[14px]
                 placeholder:text-[#4b5264] text-white bg-transparent outline-none' />
 
@@ -35,7 +35,7 @@ const Navbar = () => {
             <div className='md:flex flex-row justify-end gap-4'>
                 <CustomButton 
                     btntype = "button"
-                    title = {address ? 'Create a campaign' : 'Connect'}
+                    title = {address ? 'Create your Membership' : 'Connect'}
                     styles= {address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
                     handleClick={() =>{
                         if(address) navigate('create-campaigns')

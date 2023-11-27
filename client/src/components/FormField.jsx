@@ -20,7 +20,7 @@ const FormField = ({LabelName , placeholder , inputType ,
                     placeholder={placeholder}
                     className='py-[15px] px-[15px] outline-none
                     border-[1px] border-[#3a4a43] bg-transparent font-epilogue
-                    text-white text-[14px] placegolder:text-[#4b5264] rounded-[10px]'
+                    text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px]'
                 
                 />
             ) : (
@@ -28,12 +28,12 @@ const FormField = ({LabelName , placeholder , inputType ,
                     required
                     value={value} 
                     onChange={handleChange}
-                    type={inputType}
                     step='0.01'
+                    type={inputType}
                     placeholder={placeholder}
                     className='py-[15px] px-[15px] outline-none
                     border-[1px] border-[#3a4a43] bg-transparent font-epilogue
-                    text-white text-[14px] placegolder:text-[#4b5264] rounded-[10px]'
+                    text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px]'
                 />
 
             )}

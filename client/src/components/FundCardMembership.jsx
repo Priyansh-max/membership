@@ -4,7 +4,7 @@ import { tagType , thirdweb } from '../assets';
 import { daysLeft } from '../utils';
 
 
-const FundCard = ({owner,title,description,target,
+const FundCardMembership = ({owner,title,description,target,
 deadline,amountCollected,image,handleClick}) => {
   const remainingDays = daysLeft(deadline);
   
@@ -40,10 +40,11 @@ deadline,amountCollected,image,handleClick}) => {
 
           <div className='flex flex-col'>
             <h4 className='font-epilogue font-semibold text-[14px]
-            text-[#b2b3bd] leading-[22px]'>{deadline} Days</h4>
+            text-[#b2b3bd] leading-[22px]'>{deadline} Days</h4> 
+            {/* yaha pe deadline ke jhage remainingdays ayega after create a perfect remaining days functionn */}
 
             <p className='mt-[3px] font-epilogue font-normal text-[12px]
-            leading-[18px] text-[#808191] text-ellipsis overflow-hidden ...'>Duration</p>
+            leading-[18px] text-[#808191] text-ellipsis overflow-hidden ...'>Days left</p>
 
           </div>
 
@@ -67,4 +68,4 @@ deadline,amountCollected,image,handleClick}) => {
   )
 }
 
-export default FundCard
+export default FundCardMembership

@@ -1,20 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; 
-import {FundCardMembership} from '../components';
+import {FundCard} from '../components';
 
 import { loader } from '../assets';
 
-const DisplayMembershipRented = ({title , isLoading , campaigns}) => {
+const DisplayYourMembership = ({title , isLoading , campaigns}) => {
     const navigate = useNavigate();
     const handleNavigate = (campaign) => {
-        navigate(`/Membership-details/${campaign.title}`
+        navigate(`/YourMembership-details/${campaign.title}`
         ,{state:campaign})
 
     }
 
   
     return (
-    <div className='mt-[27px]'>
+    <div>
         <h1 className='font-epilogue font-semibold
         text-[18px] text-white text left'>{title} 
         ({campaigns.length})</h1>
@@ -28,20 +28,25 @@ const DisplayMembershipRented = ({title , isLoading , campaigns}) => {
             {!isLoading && campaigns.length == 0 && (
                 <p className='font-epilogue font-semibold
                 text-[14px] leading-[30px] text-[#818183]'>
-                    You have not rented any membership currently!!!
+                    You have not create any membership till now!! .. :0
                 </p>
             )}
 
             {!isLoading && campaigns.length > 0 && campaigns.map 
-            ((campaign) => <FundCardMembership
+            ((campaign) => <FundCard 
                 key={campaign.id}
                 {...campaign}
                 handleClick={() => handleNavigate(campaign)}
-            />
-            )}
+
+            
+            />)}
+
+
+
         </div>
+        
     </div>
   )
 }
 
-export default DisplayMembershipRented
+export default DisplayYourMembership

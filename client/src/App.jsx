@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route , Routes }from 'react-router-dom';
-import {CampaignDetails , CreateCampaign , Home , MembershipInfo, Profile} from './pages';
+import {CampaignDetails , CreateCampaign , Home , MembershipInfo, Profile, YourMembershipDetails} from './pages';
 import { Slidebar,Navbar } from './components';
 export const App = () => {
   return (
@@ -18,6 +18,7 @@ export const App = () => {
           <Route path="/create-campaigns" element={<CreateCampaign />} />
           <Route path="/campaign-details/:id" element={<CampaignDetails />} />
           <Route path="/Membership-details/:id" element={<MembershipInfo />} />
+          <Route path="/YourMembership-details/:id" element={<YourMembershipDetails />} />
         </Routes>
 
       </div>

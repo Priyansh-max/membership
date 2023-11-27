@@ -5,29 +5,43 @@ import { MediaRenderer } from "@thirdweb-dev/react";
 
 
 const MembershipInfo = () => {
+  const [isLoading,setIsLoading] = useState(false);
   const {state} = useLocation();
-  const { donate, getCampaigns, contract, address } = useStateContext();
+  const {getCampaigns, contract, address } = useStateContext();
   const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    const fetchFileData = async () => {
-      try {
+  // useEffect(() => {
+  //   const fetchFileData = async () => {
+  //     try {
         
-        const imageData = await getCampaigns();
-        console.log(imageData);
-        setImage(imageData[2].fileuri);
+  //       const imageData = await getDonatedCampaigns();
+  //       console.log(imageData);
+  //       console.log(imageData[5].fileuri)
+  //       setImage(imageData[5].fileuri);
 
-      } catch (error) {
-        console.error('Error fetching file data:', error);
-      }
-    };
+  //     } catch (error) {
+  //       console.error('Error fetching file data:', error);
+  //     }
+  //   };
 
-    fetchFileData();
-  }, [3000]);
+  //   fetchFileData();
+  // }, [3000]);
+
+  const fetchCampaigns = async () => {
+    setIsLoading(true);
+    
+    setImage(state.fileuri);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    if(contract) fetchCampaigns();
+    console.log("Image: ", image);
+  },[address , contract, image]);
 
   return (
     <div>
-        <MediaRenderer src={image} />
+        {image && <MediaRenderer src={`ipfs://${image}`} />}
     </div>
   );
 };

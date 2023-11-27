@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React , {useState, useEffect} from 'react'
 import { useStorageUpload } from "@thirdweb-dev/react";
 import {useNavigate} from 'react-router-dom';
 import {ethers} from 'ethers';
@@ -16,6 +16,7 @@ const CreateCampaign = () => {
   const [File , setFile] = useState();
   const [Fileuri , setFileuri] = useState();
   const { mutateAsync: upload } = useStorageUpload();
+  
   const [form , setForm] = useState({
     name:'',
     title:'',
@@ -26,47 +27,71 @@ const CreateCampaign = () => {
     fileuri:''
   })
 
-const handleFormFieldChange = (fieldname,e) => {
-  setForm({...form,[fieldname]:e.target.value})
-}
+  const handleFormFieldChange = (fieldname,e) => {
+    setForm({...form,[fieldname]:e.target.value})
+  }
 
-const handleFileUpload = async () => {
-  try {
-    const uploadUrl = await upload({
-      data: [File],
-      options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
-    });
-    alert(uploadUrl);
-    console.log(uploadUrl.toString());
-    const urlParts = uploadUrl.toString().split('/');
-    const ipfsHash = urlParts[urlParts.length - 2];
-    setFileuri(ipfsHash);
-    // setForm({ ...form, fileuri: ipfsHash });
-    console.log(`IPFS Hash: ${ipfsHash}`);
-  } catch (error) {
-    console.error('Error uploading to IPFS:', error);
-    }
-  };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  checkIfImage(form.image , async (exists) => {
-    if(exists){
-      setIsLoading(true);
-      await createCampaign({...form , 
-      target:ethers.utils.parseUnits(form.target,18)});
-      setIsLoading(false);
-      navigate('/')
-
+  useEffect(() => {
+    if (File) {
+      handleFileUpload(); 
     }
-    else{
-      alert("Provide valid image url");
-      setForm({...form , image:''});
-    }
-  }) 
+  }, [File]);
 
-}
+  useEffect(() => {
+    console.log("Updated fileURI state:", form.Fileuri);
+  }, [form.Fileuri])
+
+  const handleFileUpload = async (e) => {
+    e.preventDefault();
+
+    try {
+      console.log("Starting file upload");
+      const uploadUrl = await upload({
+        data: [File],
+        options: { uploadWithGatewayUrl: true, uploadWithoutDirectory: true },
+      });
+      console.log("Upload URL:", uploadUrl);
+
+      console.log(uploadUrl.toString());
+
+      const urlParts = uploadUrl.toString().split('/');
+      const ipfsHash = urlParts[urlParts.length - 2];
+
+      setFileuri(ipfsHash);
+      setForm((prevForm) => ({
+        ...prevForm,
+        fileuri: ipfsHash,
+      }));
+
+      console.log("fileURI state:", Fileuri);
+
+      console.log(`IPFS Hash: ${ipfsHash}`);
+    } catch (error) {
+      console.error('Error uploading to IPFS:', error);
+      }
+    };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    console.log(form.fileuri);
+
+    checkIfImage(form.image , async (exists) => {
+      if(exists){
+        setIsLoading(true);
+        await createCampaign({...form , 
+        target:ethers.utils.parseUnits(form.target,18)});
+        setIsLoading(false);
+        navigate('/')
+
+      }
+      else{
+        alert("Provide valid image url");
+        setForm({...form , image:''});
+      }
+    }) 
+
+  }
 
   return (
     <div className='bg-[#1c1c24]  flex justify-center items-center 
@@ -161,18 +186,29 @@ const handleSubmit = async (e) => {
               />
             </div> */}
 
-            {/* <div>
-              <FormField 
-                LabelName='Exclusive Content*'
-                placeholder='Select Image*'
-                inputType='file'
-                onChange={(e) => setFile(e.target.files[0])}
-                value={form.fileuri}
-                handleChange={(e) => handleFormFieldChange('fileuri',e)}
-              />
+            <div  className='flex flex-wrap gap-[40px]'>
+              <label 
+                className = "flex-1 w-full flex flex-col"
+              >
+                <span className='font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]'>Upload Files</span>
+                  <input 
+                    className = "py-[15px] px-[15px] outline-none border-[1px] border-[#3a4a43] bg-transparent font-epilogue text-white text-[14px] placeholder:text-[#4b5264] rounded-[10px]"
+                    placeholder='Select Image'
+                    type='file'
+                    onChange={(e) => setFile(e.target.files[0])} 
+                  />
+              </label>
+              
 
-              <button onClick={handleFileUpload}>Upload</button> 
-            </div> */}
+              <div className='flex justify-center items-center mt-8'>
+                <button 
+                  className="font-epilogue font-semibold text-[16px] leading-[26px] text-white min-h-[52px] px-4 rounded-[10px] bg-[#1dc071]" 
+                  onClick={handleFileUpload}
+                >
+                  Upload Files
+                </button> 
+              </div>
+            </div>
 
             {/* <input type="file" onChange={(e) => setFile(e.target.files[0])} />
             <button onClick={handleFileUpload}>Upload</button> */}
@@ -182,6 +218,7 @@ const handleSubmit = async (e) => {
                 btnType='submit'
                 title='Submit new Campaign'
                 styles='bg-[#1dc071]'
+                handleClick={handleSubmit}
               />
 
             </div>
